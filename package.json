@@ -1,0 +1,10 @@
+{
+  "name": "padel-base-plugin",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "validate": "node scripts/validate.mjs",
+    "validate:live": "node scripts/validate.mjs --live",
+    "package:openai": "cd plugins/padel-base && rm -f ../../padel-base-openai.zip && zip -rq ../../padel-base-openai.zip . -x '.claude-plugin/*' '.mcp.json'"
+  }
+}

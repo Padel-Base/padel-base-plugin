@@ -1,0 +1,20 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
+  "mcpServers": {
+    "padel-base": {
+      "type": "streamable-http",
+      "url": "https://api.padel-base.fr/functions/v1/mcp-server",
+      "extensions": {
+        "com.openai": {
+          "auth": {
+            "type": "oauth",
+            "client": {
+              "mode": "dcr"
+            },
+            "registrationUrl": "https://api.padel-base.fr/auth/v1/oauth/clients/register"
+          }
+        }
+      }
+    }
+  }
+}

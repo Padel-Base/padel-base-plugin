@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Padel-Base">
+  <rect width="512" height="512" rx="112" fill="#1F7A4D"/>
+  <g transform="rotate(-35 256 256)">
+    <rect x="234" y="300" width="44" height="150" rx="18" fill="#0F3D27"/>
+    <ellipse cx="256" cy="200" rx="118" ry="140" fill="#F4F1E8"/>
+    <g fill="#1F7A4D">
+      <circle cx="216" cy="150" r="13"/><circle cx="256" cy="150" r="13"/><circle cx="296" cy="150" r="13"/>
+      <circle cx="196" cy="195" r="13"/><circle cx="236" cy="195" r="13"/><circle cx="276" cy="195" r="13"/><circle cx="316" cy="195" r="13"/>
+      <circle cx="216" cy="240" r="13"/><circle cx="256" cy="240" r="13"/><circle cx="296" cy="240" r="13"/>
+    </g>
+  </g>
+  <circle cx="384" cy="376" r="54" fill="#D7F205"/>
+  <path d="M342 352c26 6 50 30 56 72M426 400c-26-6-50-30-56-72" fill="none" stroke="#F4F1E8" stroke-width="8" stroke-linecap="round"/>
+</svg>

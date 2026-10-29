@@ -1,0 +1,25 @@
+name: validate
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Cross-host checks (manifests, MCP, skills)
+        run: node scripts/validate.mjs
+      - name: Claude Code validator
+        run: |
+          npm install -g @anthropic-ai/claude-code@2.1.312
+          claude plugin validate .
+          claude plugin validate plugins/padel-base

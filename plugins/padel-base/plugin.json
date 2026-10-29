@@ -1,0 +1,36 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "padel-base",
+  "version": "0.1.0",
+  "description": "Find free padel courts, open matches and federal tournaments at Padel-Base clubs, and manage your level and weekly availabilities.",
+  "author": {
+    "name": "Padel-Base",
+    "url": "https://www.padel-base.fr"
+  },
+  "homepage": "https://www.padel-base.fr",
+  "repository": "https://github.com/Padel-Base/padel-base-plugin",
+  "keywords": ["padel", "courts", "matches", "tournaments", "fft", "france"],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Padel-Base",
+        "shortDescription": "Où et quand jouer au padel",
+        "longDescription": "Padel-Base trouve les terrains libres, les parties ouvertes qui cherchent des joueurs et les tournois FFT où tu peux encore t'inscrire dans les clubs Padel-Base, sur tes créneaux habituels. Il gère aussi ton niveau et tes disponibilités. Il ne réserve rien : chaque résultat renvoie vers l'app du club ou la page d'inscription.",
+        "developerName": "Padel-Base",
+        "category": "Productivity",
+        "capabilities": ["Read", "Write"],
+        "websiteURL": "https://www.padel-base.fr",
+        "privacyPolicyURL": "https://www.padel-base.fr/privacy",
+        "termsOfServiceURL": "https://www.padel-base.fr/terms",
+        "defaultPrompt": [
+          "Quels terrains sont libres demain soir dans mon club ?",
+          "Qu'est-ce que je peux jouer cette semaine sur mes créneaux ?",
+          "Quels tournois P100 sont ouverts ce mois-ci ?"
+        ],
+        "brandColor": "#1F7A4D",
+        "composerIcon": "./assets/icon.svg",
+        "logo": "./assets/logo.svg"
+      }
+    }
+  }
+}
