@@ -137,7 +137,15 @@ for (const [name, dir] of pluginDirs) {
     }
   }
   if (claude && openai) {
-    for (const key of ["version", "description", "homepage", "repository"]) {
+    for (
+      const key of [
+        "version",
+        "description",
+        "homepage",
+        "repository",
+        "license",
+      ]
+    ) {
       if (JSON.stringify(claude[key]) !== JSON.stringify(openai[key])) {
         fail(
           name,

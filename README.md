@@ -107,3 +107,9 @@ match.
 - Instructions in English. Examples of output in French, informal "tu", as the
   WhatsApp bot speaks.
 - Never put a real URL in an example: links come only from tool results.
+
+## License
+
+[Apache-2.0](LICENSE). Copyright 2026 PADEL BASE. The Padel-Base name and logo
+are trademarks of PADEL BASE and are not covered by the license: see
+[NOTICE](NOTICE).

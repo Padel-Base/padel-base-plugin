@@ -9,6 +9,7 @@
   },
   "homepage": "https://www.padel-base.fr",
   "repository": "https://github.com/Padel-Base/padel-base-plugin",
+  "license": "Apache-2.0",
   "keywords": ["padel", "courts", "matches", "tournaments", "fft", "france"],
   "extensions": {
     "com.openai": {
