@@ -2,7 +2,7 @@
   "mcpServers": {
     "padel-base": {
       "type": "http",
-      "url": "https://api.padel-base.fr/functions/v1/mcp-server"
+      "url": "https://api.padel-base.fr/functions/v1/mcp-server/mcp"
     }
   }
 }

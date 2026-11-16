@@ -10,7 +10,7 @@
     {
       "name": "padel-base",
       "source": "./plugins/padel-base",
-      "description": "Find free padel courts, open matches and federal tournaments at Padel-Base clubs.",
+      "description": "Find free padel courts, open matches and federal tournaments in French padel clubs, and keep your level and weekly availabilities.",
       "category": "lifestyle"
     }
   ]

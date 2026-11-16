@@ -1,8 +1,8 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "padel-base",
-  "version": "0.1.0",
-  "description": "Find free padel courts, open matches and federal tournaments at Padel-Base clubs, and manage your level and weekly availabilities.",
+  "version": "0.2.0",
+  "description": "Find free padel courts, open matches and federal tournaments in French padel clubs, and keep your level and weekly availabilities.",
   "author": {
     "name": "Padel-Base",
     "url": "https://www.padel-base.fr"
@@ -10,27 +10,96 @@
   "homepage": "https://www.padel-base.fr",
   "repository": "https://github.com/Padel-Base/padel-base-plugin",
   "license": "Apache-2.0",
-  "keywords": ["padel", "courts", "matches", "tournaments", "fft", "france"],
+  "keywords": [
+    "padel",
+    "courts",
+    "matches",
+    "tournaments",
+    "fft",
+    "france"
+  ],
   "extensions": {
     "com.openai": {
       "interface": {
         "displayName": "Padel-Base",
-        "shortDescription": "Où et quand jouer au padel",
-        "longDescription": "Padel-Base trouve les terrains libres, les parties ouvertes qui cherchent des joueurs et les tournois FFT où tu peux encore t'inscrire dans les clubs Padel-Base, sur tes créneaux habituels. Il gère aussi ton niveau et tes disponibilités. Il ne réserve rien : chaque résultat renvoie vers l'app du club ou la page d'inscription.",
+        "shortDescription": "Find where and when to play",
+        "longDescription": "Padel-Base finds free padel courts, open matches that still need players and federal (FFT) tournaments you can still enter, in one club or around a place in France. It also keeps your level and weekly availabilities, so it can answer on the slots you usually play, and it drafts the message you post to find players. It never books or pays: each result links to the club's booking page or to the tournament registration page. Answers are in French by default.",
         "developerName": "Padel-Base",
         "category": "Productivity",
-        "capabilities": ["Read", "Write"],
+        "capabilities": [
+          "Read",
+          "Write"
+        ],
         "websiteURL": "https://www.padel-base.fr",
         "privacyPolicyURL": "https://www.padel-base.fr/privacy",
         "termsOfServiceURL": "https://www.padel-base.fr/terms",
         "defaultPrompt": [
-          "Quels terrains sont libres demain soir dans mon club ?",
-          "Qu'est-ce que je peux jouer cette semaine sur mes créneaux ?",
-          "Quels tournois P100 sont ouverts ce mois-ci ?"
+          "Un terrain de padel libre demain soir à Alfortville ?",
+          "Des parties ouvertes ce soir près de chez moi ?",
+          "Quels tournois P100 autour de Lyon ce mois-ci ?"
         ],
         "brandColor": "#1F7A4D",
         "composerIcon": "./assets/icon.svg",
         "logo": "./assets/logo.svg"
+      },
+      "review": {
+        "test_cases": {
+          "positive": [
+            {
+              "description": "Free courts at a named club on a given evening.",
+              "prompt": "Un terrain libre demain soir à Play Padel, à Alfortville ?",
+              "tools_triggered": "find_courts",
+              "expected_behavior": "Lists tomorrow evening's free slots at Play Padel (Alfortville) as bullets with start and end times, then one link to the club's booking page. If nothing is free, says so in one line and gives the next day with free slots. It does not claim to book anything."
+            },
+            {
+              "description": "Free courts around a town over a weekend, with no club named.",
+              "prompt": "Je cherche un terrain de padel ce week-end autour de Créteil.",
+              "tools_triggered": "find_courts",
+              "expected_behavior": "Searches around Créteil for Saturday and Sunday and lists up to five clubs that have free slots, nearest first, each with its distance or town and its own booking link or phone number."
+            },
+            {
+              "description": "Open matches to join at a club.",
+              "prompt": "Y a-t-il des parties ouvertes ce soir à Play Padel à Alfortville ?",
+              "tools_triggered": "find_open_matches",
+              "expected_behavior": "Lists tonight's open matches with time, level as the club states it and places left, then one link to join in the club's app. With none, says so and proposes a free court slot at the same time."
+            },
+            {
+              "description": "Tournaments around a city, filtered by category.",
+              "prompt": "Quels tournois P100 je peux faire autour de Lyon ce mois-ci ?",
+              "tools_triggered": "search_tournaments",
+              "expected_behavior": "Lists up to five P100 tournaments in clubs around Lyon in the next 30 days, soonest first, with date, category, teams registered and price when known, each with its registration link."
+            },
+            {
+              "description": "Saving weekly availabilities without losing existing ones.",
+              "prompt": "Je joue le mardi soir et le samedi matin, enregistre mes disponibilités.",
+              "tools_triggered": "get_availabilities, set_availabilities",
+              "expected_behavior": "Reads the saved availabilities first, adds Tuesday evening and Saturday morning as explicit hours, saves the full set and confirms in one line what was saved, including the hours it chose."
+            }
+          ],
+          "negative": [
+            {
+              "description": "General padel advice needs no Padel-Base data: the assistant answers from its own knowledge and calls no tool.",
+              "prompt": "Quelle raquette de padel choisir quand on débute ?"
+            },
+            {
+              "description": "Another sport is out of scope: the assistant says Padel-Base only covers padel and does not search courts.",
+              "prompt": "Trouve-moi un court de tennis libre demain à Paris."
+            },
+            {
+              "description": "Bulk export is not supported: the assistant declines to build a directory and asks which club or town the player wants to play in.",
+              "prompt": "Donne-moi la liste de tous les clubs de padel de France dans un fichier Excel."
+            }
+          ]
+        }
+      },
+      "publication": {
+        "release_notes": "First public release: free courts, open matches and tournaments in one club or around a place, club search, level and weekly availabilities.",
+        "translations": {
+          "fr-FR": {
+            "subtitle": "Où et quand jouer au padel",
+            "description": "Padel-Base trouve les terrains de padel libres, les parties ouvertes qui cherchent des joueurs et les tournois FFT où l'on peut encore s'inscrire, dans un club ou autour d'un lieu en France. Il garde aussi votre niveau et vos disponibilités de la semaine, pour répondre sur vos créneaux habituels, et rédige le message à publier pour trouver des joueurs. Il ne réserve rien et ne fait rien payer : chaque résultat renvoie vers la page de réservation du club ou la page d'inscription du tournoi."
+          }
+        }
       }
     }
   }
