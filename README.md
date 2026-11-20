@@ -1,11 +1,9 @@
 # padel-base-plugin
 
-The Padel-Base plugin for **Claude** (Claude Code, Claude Desktop, claude.ai)
+The Padel Base plugin for **Claude** (Claude Code, Claude Desktop, claude.ai)
 and **ChatGPT / Codex**. One plugin, two manifests:
 
-- the **MCP server** `mcp-server` from
-  [supabase-backend](https://github.com/Padel-Base/supabase-backend)
-  (`supabase/functions/mcp-server/`), served at
+- the **MCP server** served at
   `https://api.padel-base.fr/functions/v1/mcp-server/mcp`, does the work: club
   search, live courts, open matches, tournaments, the player's level and
   availabilities;
@@ -150,6 +148,6 @@ match.
 
 ## License
 
-[Apache-2.0](LICENSE). Copyright 2026 PADEL BASE. The Padel-Base name and logo
+[Apache-2.0](LICENSE). Copyright 2026 PADEL BASE. The Padel Base name and logo
 are trademarks of PADEL BASE and are not covered by the license: see
 [NOTICE](NOTICE).

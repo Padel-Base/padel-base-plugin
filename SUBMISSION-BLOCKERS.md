@@ -8,7 +8,7 @@ ticked. How to submit is in [README.md](README.md#publish-to-the-directories);
 
 ## Blocking
 
-- [ ] **1. The MCP server is not live in production** (both)
+- [x] **1. The MCP server is not live in production** (both)
 
   `https://api.padel-base.fr/functions/v1/mcp-server/mcp` answers 404
   `Requested function was not found`. Both stores scan and test the production
@@ -16,16 +16,18 @@ ticked. How to submit is in [README.md](README.md#publish-to-the-directories);
 
   Done when: `npm run validate:live` passes (a 401 naming the OAuth metadata).
 
-- [ ] **2. No support page** (both)
+- [x] **2. No support page** (both)
 
-  Both stores require an https support URL. The site only has
-  `mailto:contact@padel-base.fr`; `/support` and `/contact` return 404.
+  Both stores require an https support URL. Checked on 2026-11-20:
+  `https://www.padel-base.fr/support` (and `/en/support`) answers 200 with a
+  contact address, a response time and troubleshooting. Its URL is set as
+  `supportUrl` in `plugins/padel-base/.claude-plugin/plugin.json` and as
+  `interface.supportURL` in `plugins/padel-base/plugin.json`.
 
-  Done when: the page exists, and its URL is set as `supportUrl` in
-  `plugins/padel-base/.claude-plugin/plugin.json` and as `interface.supportURL`
-  in `plugins/padel-base/plugin.json`.
+  Left to do on the site: the page says the app can be opened from the ChatGPT
+  and Claude directories. Reword it until the listings exist.
 
-- [ ] **3. Tool annotations are not deployed** (both)
+- [x] **3. Tool annotations are not deployed** (both)
 
   Claude requires a `title` on every tool; OpenAI requires `readOnlyHint`,
   `destructiveHint` and `openWorldHint` as explicit booleans. The fix is written
@@ -47,7 +49,11 @@ ticked. How to submit is in [README.md](README.md#publish-to-the-directories);
   Done when: it is merged and deployed with items 1 and 3, and `tools/list` in
   production shows only each tool's own arguments.
 
-- [ ] **5. Privacy policy must match what the plugin does** (both)
+  Checked on 2026-11-20 through the connected Padel Base connector: the tool
+  schemas carry only each tool's own arguments. That is not a raw `tools/list`
+  with a token, so confirm that once before submitting.
+
+- [x] **5. Privacy policy must match what the plugin does** (both)
 
   It has to cover: email, first name, gender and phone; level and weekly
   availabilities; the searches sent (club, city, coordinates); and the recording
@@ -56,10 +62,17 @@ ticked. How to submit is in [README.md](README.md#publish-to-the-directories);
   immediately on a missing or incomplete policy.
 
   Done when: `https://www.padel-base.fr/privacy` covers every line of "What the
-  plugin sends, stores and fetches" in `plugins/padel-base/README.md`. Not
-  checked yet.
+  plugin sends, stores and fetches" in `plugins/padel-base/README.md`.
 
-- [ ] **6. Reviewer test account: built, not set up** (OpenAI; Claude on
+  Checked in production on 2026-11-20 (`/privacy` and `/en/privacy`, updated
+  20 Nov 2026): email, first and last name, gender, phone, level,
+  availabilities, searches including coordinates, the recording of each call
+  with what was sent and the answers returned, fetching from the clubs' booking
+  systems and the federal calendar, purposes, recipients, retention, contact and
+  CNIL. The one README line it does not cover is the skill reading a club's own
+  website: the user's AI does that, not Padel Base's servers.
+
+- [x] **6. Reviewer test account: built, not set up** (OpenAI; Claude on
       Verified review)
 
   OpenAI needs a demo account with sample data that signs in without an email
@@ -94,7 +107,7 @@ ticked. How to submit is in [README.md](README.md#publish-to-the-directories);
   Done when: its URL is in `extensions["com.openai"].review.demo_recording_url`
   in `plugins/padel-base/plugin.json`.
 
-- [ ] **9. Verified developer identity** (OpenAI)
+- [x] **9. Verified developer identity** (OpenAI)
 
   Individual or business verification in the OpenAI organisation settings. The
   directory shows that name as the developer.
@@ -131,9 +144,12 @@ ticked. How to submit is in [README.md](README.md#publish-to-the-directories);
   because both stores forbid concealing behaviour. The backend deliberately
   names no source in tool descriptions (a test enforces it). No provider is
   named here either, but confirm this wording suits you.
-- **Category.** `Productivity` on ChatGPT (there is no sports category),
-  `lifestyle` in the Claude marketplace file.
-- **Countries.** No restriction is set. `publication.countries: ["FR"]` would
-  limit the ChatGPT listing to France.
+- **Category.** Decided: `Productivity` on ChatGPT (there is no sports
+  category), `lifestyle` in the Claude marketplace file. Both are set.
+- **Countries.** The ChatGPT listing is limited to France, Belgium and
+  Luxembourg (`publication.countries: ["FR", "BE", "LU"]`). The Claude manifest
+  has no country field, so the Claude listing is not restricted. The listing
+  texts still say "in France": reword them if Belgian and Luxembourg clubs are
+  covered.
 - **The "Verified" label** (Claude) has no application: Anthropic decides during
   review.

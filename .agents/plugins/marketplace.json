@@ -1,7 +1,7 @@
 {
   "name": "padel-base",
   "interface": {
-    "displayName": "Padel-Base"
+    "displayName": "Padel Base"
   },
   "plugins": [
     {

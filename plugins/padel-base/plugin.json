@@ -4,7 +4,7 @@
   "version": "0.2.0",
   "description": "Find free padel courts, open matches and federal tournaments in French padel clubs, and keep your level and weekly availabilities.",
   "author": {
-    "name": "Padel-Base",
+    "name": "Padel Base",
     "url": "https://www.padel-base.fr"
   },
   "homepage": "https://www.padel-base.fr",
@@ -21,10 +21,10 @@
   "extensions": {
     "com.openai": {
       "interface": {
-        "displayName": "Padel-Base",
+        "displayName": "Padel Base",
         "shortDescription": "Find where and when to play",
-        "longDescription": "Padel-Base finds free padel courts, open matches that still need players and federal (FFT) tournaments you can still enter, in one club or around a place in France. It also keeps your level and weekly availabilities, so it can answer on the slots you usually play, and it drafts the message you post to find players. It never books or pays: each result links to the club's booking page or to the tournament registration page. Answers are in French by default.",
-        "developerName": "Padel-Base",
+        "longDescription": "Padel Base finds free padel courts, open matches that still need players and federal (FFT) tournaments you can still enter, in one club or around a place in France. It also keeps your level and weekly availabilities, so it can answer on the slots you usually play, and it drafts the message you post to find players. It never books or pays: each result links to the club's booking page or to the tournament registration page. Answers are in French by default.",
+        "developerName": "Padel Base",
         "category": "Productivity",
         "capabilities": [
           "Read",
@@ -33,6 +33,7 @@
         "websiteURL": "https://www.padel-base.fr",
         "privacyPolicyURL": "https://www.padel-base.fr/privacy",
         "termsOfServiceURL": "https://www.padel-base.fr/terms",
+        "supportURL": "https://www.padel-base.fr/support",
         "defaultPrompt": [
           "Un terrain de padel libre demain soir à Alfortville ?",
           "Des parties ouvertes ce soir près de chez moi ?",
@@ -78,11 +79,11 @@
           ],
           "negative": [
             {
-              "description": "General padel advice needs no Padel-Base data: the assistant answers from its own knowledge and calls no tool.",
+              "description": "General padel advice needs no Padel Base data: the assistant answers from its own knowledge and calls no tool.",
               "prompt": "Quelle raquette de padel choisir quand on débute ?"
             },
             {
-              "description": "Another sport is out of scope: the assistant says Padel-Base only covers padel and does not search courts.",
+              "description": "Another sport is out of scope: the assistant says Padel Base only covers padel and does not search courts.",
               "prompt": "Trouve-moi un court de tennis libre demain à Paris."
             },
             {
@@ -93,11 +94,16 @@
         }
       },
       "publication": {
+        "countries": [
+          "FR",
+          "BE",
+          "LU"
+        ],
         "release_notes": "First public release: free courts, open matches and tournaments in one club or around a place, club search, level and weekly availabilities.",
         "translations": {
           "fr-FR": {
             "subtitle": "Où et quand jouer au padel",
-            "description": "Padel-Base trouve les terrains de padel libres, les parties ouvertes qui cherchent des joueurs et les tournois FFT où l'on peut encore s'inscrire, dans un club ou autour d'un lieu en France. Il garde aussi votre niveau et vos disponibilités de la semaine, pour répondre sur vos créneaux habituels, et rédige le message à publier pour trouver des joueurs. Il ne réserve rien et ne fait rien payer : chaque résultat renvoie vers la page de réservation du club ou la page d'inscription du tournoi."
+            "description": "Padel Base trouve les terrains de padel libres, les parties ouvertes qui cherchent des joueurs et les tournois FFT où l'on peut encore s'inscrire, dans un club ou autour d'un lieu en France. Il garde aussi votre niveau et vos disponibilités de la semaine, pour répondre sur vos créneaux habituels, et rédige le message à publier pour trouver des joueurs. Il ne réserve rien et ne fait rien payer : chaque résultat renvoie vers la page de réservation du club ou la page d'inscription du tournoi."
           }
         }
       }
