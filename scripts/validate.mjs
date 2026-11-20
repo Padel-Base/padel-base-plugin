@@ -22,6 +22,7 @@ const TOOLS = [
   "set_level",
   "get_availabilities",
   "set_availabilities",
+  "search_clubs",
   "find_courts",
   "find_courts_for_me",
   "find_open_matches",
@@ -41,8 +42,27 @@ const PORTABLE_KEYS = new Set([
 
 const NAME_RE = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 
+const OPENAI_CATEGORIES = [
+  "Productivity",
+  "Creativity",
+  "Developer Tools",
+  "Business & Operations",
+  "Data & Analytics",
+  "Communication",
+  "Education & Research",
+  "Security",
+  "Finance",
+  "Healthcare",
+  "Travel",
+  "Entertainment",
+  "Other",
+];
+
 const problems = [];
+const pending = [];
 const fail = (where, msg) => problems.push(`${where}: ${msg}`);
+// Needed before a directory submission, not to load the plugin.
+const todo = (where, msg) => pending.push(`${where}: ${msg}`);
 const rel = (p) => relative(ROOT, p);
 
 function readJson(path) {
@@ -153,8 +173,14 @@ for (const [name, dir] of pluginDirs) {
         );
       }
     }
-    maxLen(at("plugin.json description"), openai.description, 4000);
+    maxLen(at("plugin.json description"), openai.description, 1024);
+    if (!/^\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?$/.test(openai.version ?? "")) {
+      fail(at("plugin.json version"), "must be semantic (1.2.3)");
+    }
   }
+  if (claude) checkClaudeListing(claude, dir, at);
+  checkPluginFolder(dir, at);
+  checkReview(openai, at);
 
   const ui = openai?.extensions?.["com.openai"]?.interface;
   if (openai && !ui) {
@@ -194,6 +220,13 @@ for (const [name, dir] of pluginDirs) {
       if (ui[k] !== undefined) checkPath(w(k), dir, ui[k]);
     }
     for (const k of ["composerIcon", "logo"]) if (!ui[k]) fail(w(k), "missing");
+    for (const k of ["websiteURL", "privacyPolicyURL", "termsOfServiceURL"]) {
+      if (!ui[k]) fail(w(k), "required for a plugin with a remote MCP server");
+    }
+    if (!ui.supportURL) todo(w("supportURL"), "required to submit (https)");
+    if (!OPENAI_CATEGORIES.includes(ui.category)) {
+      fail(w("category"), `must be one of ${OPENAI_CATEGORIES.join(", ")}`);
+    }
     for (const s of ui.screenshots ?? []) checkPath(w("screenshots"), dir, s);
   }
 
@@ -230,6 +263,125 @@ for (const [name, dir] of pluginDirs) {
   }
 
   checkSkills(name, join(dir, "skills"));
+}
+
+// ── Directory requirements ────────────────────────────────────────────────────
+
+/** Listing fields the Claude directory reads from plugin.json. */
+function checkClaudeListing(m, dir, at) {
+  const w = (k) => at(`.claude-plugin/plugin.json ${k}`);
+  for (const k of ["description", "version"]) if (!m[k]) fail(w(k), "missing");
+  if (!m.author?.name) fail(w("author.name"), "missing");
+  if (!m.license) fail(w("license"), "missing");
+  maxLen(w("displayName"), m.displayName, 64);
+  if (m.icon === undefined) fail(w("icon"), "missing");
+  else checkPath(w("icon"), dir, m.icon);
+  for (
+    const k of [
+      "documentationUrl",
+      "supportUrl",
+      "privacyPolicyUrl",
+      "termsOfServiceUrl",
+    ]
+  ) {
+    if (m[k] !== undefined && !/^https:\/\/\S+$/.test(m[k])) {
+      fail(w(k), "must be an https URL");
+    }
+  }
+  if (!m.privacyPolicyUrl) fail(w("privacyPolicyUrl"), "missing");
+  if (!m.supportUrl) todo(w("supportUrl"), "required to submit (https)");
+  if (m.hooks || m.userConfig) {
+    fail(w("hooks/userConfig"), "not accepted by the OpenAI directory");
+  }
+}
+
+function* allFiles(dir) {
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    const p = join(dir, entry.name);
+    if (entry.isSymbolicLink()) fail(rel(p), "symlinks are not accepted");
+    else if (entry.isDirectory()) yield* allFiles(p);
+    else yield p;
+  }
+}
+
+/** What both stores ask of the folder users install. */
+function checkPluginFolder(dir, at) {
+  const readme = join(dir, "README.md");
+  if (!existsSync(readme)) fail(at("README.md"), "missing");
+  else {
+    const prose = readFileSync(readme, "utf8").replace(/```[\s\S]*?```/g, "");
+    if (prose.split(/\s+/).filter(Boolean).length < 40) {
+      fail(at("README.md"), "needs at least 40 words outside code blocks");
+    }
+  }
+  if (!existsSync(join(dir, "LICENSE"))) fail(at("LICENSE"), "missing");
+  for (const banned of ["CLAUDE.md", "hooks", ".app.json", "apps"]) {
+    if (existsSync(join(dir, banned))) {
+      fail(at(banned), "must not be in the plugin folder");
+    }
+  }
+  let count = 0;
+  for (const file of allFiles(dir)) {
+    count++;
+    const name = file.split("/").pop();
+    if ([".DS_Store", "Thumbs.db", "desktop.ini"].includes(name)) {
+      fail(rel(file), "remove this file");
+    }
+    if (!/\.(md|json|svg|png|jpe?g|gif|webp)$/.test(name) &&
+      !["LICENSE", "NOTICE"].includes(name)) {
+      fail(rel(file), "only text and image files belong in the plugin folder");
+    }
+    const size = readFileSync(file).length;
+    if (!/\.(svg|png|jpe?g|gif|webp)$/.test(name) && size > 256 * 1024) {
+      fail(rel(file), "over 256 KiB");
+    }
+    if (name.endsWith(".svg")) {
+      const box = readFileSync(file, "utf8").match(
+        /<svg[^>]*viewBox="0 0 ([\d.]+) ([\d.]+)"/,
+      );
+      if (!box || box[1] !== box[2] || Number(box[1]) < 48) {
+        fail(rel(file), "SVG needs a square numeric viewBox of at least 48");
+      }
+    }
+  }
+  if (count > 512) fail(at("."), `${count} files, max 512`);
+}
+
+/** OpenAI review material for a plugin with a remote MCP server. */
+function checkReview(openai, at) {
+  const ext = openai?.extensions?.["com.openai"] ?? {};
+  const w = (k) => at(`plugin.json ${k}`);
+  const cases = ext.review?.test_cases ?? {};
+  const positive = cases.positive ?? [];
+  const negative = cases.negative ?? [];
+  if (positive.length !== 5 || negative.length !== 3) {
+    todo(w("review.test_cases"), "needs exactly 5 positive and 3 negative");
+  }
+  for (const [i, c] of [...positive, ...negative].entries()) {
+    if (!c.description || !c.prompt) {
+      fail(w(`review.test_cases[${i}]`), "description and prompt are required");
+    }
+  }
+  for (const [i, c] of positive.entries()) {
+    if (!c.tools_triggered || !c.expected_behavior) {
+      fail(w(`positive[${i}]`), "tools_triggered and expected_behavior");
+    }
+    for (const tool of (c.tools_triggered ?? "").split(",")) {
+      if (tool.trim() && !TOOLS.includes(tool.trim())) {
+        fail(w(`positive[${i}]`), `names unknown tool ${tool.trim()}`);
+      }
+    }
+  }
+  if (!ext.review?.demo_recording_url) {
+    todo(w("review.demo_recording_url"), "video walkthrough URL to submit");
+  }
+  if (!ext.publication?.release_notes) {
+    todo(w("publication.release_notes"), "required to submit");
+  }
+  for (const [locale, t] of Object.entries(ext.publication?.translations ?? {})) {
+    maxLen(w(`translations.${locale}.subtitle`), t.subtitle, 30);
+    maxLen(w(`translations.${locale}.description`), t.description, 4000);
+  }
 }
 
 // ── Skills ────────────────────────────────────────────────────────────────────
@@ -277,6 +429,10 @@ function checkSkills(plugin, skillsDir) {
       fail(rel(skillMd), "name must be kebab-case, ≤ 64 characters");
     }
     maxLen(`${rel(skillMd)} description`, fields.description, 1024);
+    if (`${plugin}:${fields.name}`.length > 64) {
+      fail(rel(skillMd), "plugin:skill is over 64 characters");
+    }
+    if (body.trim() === "") fail(rel(skillMd), "empty body");
     for (const key of Object.keys(fields)) {
       if (!PORTABLE_KEYS.has(key)) {
         fail(rel(skillMd), `frontmatter key "${key}" is Claude Code only`);
@@ -290,11 +446,18 @@ function checkSkills(plugin, skillsDir) {
     // Links inside code are templates for the agent ("[Réserver](app_link)").
     const prose = text.replace(/```[\s\S]*?```/g, "").replace(/`[^`\n]*`/g, "");
     for (const [, target] of prose.matchAll(/\]\(([^)\s]+)\)/g)) {
-      if (/^(https?:|mailto:|#)/.test(target) || target.includes("…")) continue;
+      // Web links, phone links, and placeholders such as "(lien)".
+      if (/^(https?:|mailto:|tel:|#)/.test(target) || !/[./]/.test(target)) {
+        continue;
+      }
       const path = target.split("#")[0];
       if (!existsSync(resolve(dirname(file), path))) {
         fail(rel(file), `broken link ${target}`);
       }
+    }
+    // OpenAI asks for provider-neutral skill text.
+    if (/\b(Claude|ChatGPT|Codex)\b/.test(text)) {
+      fail(rel(file), "names a host: keep skill text provider-neutral");
     }
     for (const [tool] of text.matchAll(toolish)) {
       if (!TOOLS.includes(tool)) fail(rel(file), `names unknown tool ${tool}`);
@@ -360,3 +523,7 @@ if (problems.length) {
   process.exit(1);
 }
 console.log(`✓ ${pluginDirs.size} plugin(s) valid`);
+if (pending.length) {
+  console.log("\nBefore submitting to the directories:");
+  console.log(pending.map((p) => `• ${p}`).join("\n"));
+}
