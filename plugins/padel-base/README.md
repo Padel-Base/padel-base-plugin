@@ -1,4 +1,4 @@
-# Padel-Base
+# Padel Base
 
 Find somewhere to play padel in France, from Claude or ChatGPT: free courts,
 open matches that still need players, and federal (FFT) tournaments you can
@@ -13,7 +13,7 @@ or to the tournament registration page.
 ## What's inside
 
 - **One remote MCP server**, `padel-base`, at
-  `https://api.padel-base.fr/functions/v1/mcp-server/mcp`, run by Padel-Base.
+  `https://api.padel-base.fr/functions/v1/mcp-server/mcp`, run by Padel Base.
   Nine tools: `search_clubs`, `find_courts`, `find_courts_for_me`,
   `find_open_matches`, `search_tournaments`, `get_me`, `set_level`,
   `get_availabilities`, `set_availabilities`.
@@ -22,7 +22,7 @@ or to the tournament registration page.
   subject: finding a club, searching around a place, courts, tournaments, open
   matches, WhatsApp ads, estimating a level, club information.
 
-No hooks, no scripts, no local code: the plugin is text files and two logos.
+No hooks, no scripts, no local code: the plugin is text files and its logo and icons.
 
 ## Sign-in
 
@@ -31,11 +31,11 @@ approve the connection. No password. The account is created on first sign-in.
 
 ## What the plugin sends, stores and fetches
 
-- **Sent to the Padel-Base server**, only when a tool is called: what you asked
+- **Sent to the Padel Base server**, only when a tool is called: what you asked
   for (club name, city, the coordinates of the place to search around, days,
   time window, tournament filters), and your level and weekly availabilities
   when you ask to save them.
-- **Stored by Padel-Base**: your email, the first name, gender and phone number
+- **Stored by Padel Base**: your email, the first name, gender and phone number
   you may give on the sign-up page, your level and your weekly availabilities.
 - **Analytics**: the server records tool calls (arguments and answers) to
   improve the service, including club names that were not found.
@@ -73,5 +73,5 @@ tolerated.
 
 ## License
 
-[Apache-2.0](LICENSE). The Padel-Base name and logo are trademarks: see
+[Apache-2.0](LICENSE). The Padel Base name and logo are trademarks: see
 [NOTICE](NOTICE).

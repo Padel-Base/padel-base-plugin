@@ -1,11 +1,11 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "padel-base",
-  "displayName": "Padel-Base",
+  "displayName": "Padel Base",
   "version": "0.2.0",
   "description": "Find free padel courts, open matches and federal tournaments in French padel clubs, and keep your level and weekly availabilities.",
   "author": {
-    "name": "Padel-Base",
+    "name": "Padel Base",
     "url": "https://www.padel-base.fr"
   },
   "homepage": "https://www.padel-base.fr",
@@ -22,5 +22,6 @@
   "icon": "./assets/logo.svg",
   "documentationUrl": "https://github.com/Padel-Base/padel-base-plugin/blob/main/plugins/padel-base/README.md",
   "privacyPolicyUrl": "https://www.padel-base.fr/privacy",
-  "termsOfServiceUrl": "https://www.padel-base.fr/terms"
+  "termsOfServiceUrl": "https://www.padel-base.fr/terms",
+  "supportUrl": "https://www.padel-base.fr/support"
 }
