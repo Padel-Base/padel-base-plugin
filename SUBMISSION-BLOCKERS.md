@@ -144,8 +144,10 @@ ticked. How to submit is in [README.md](README.md#publish-to-the-directories);
   because both stores forbid concealing behaviour. The backend deliberately
   names no source in tool descriptions (a test enforces it). No provider is
   named here either, but confirm this wording suits you.
-- **Category.** Decided: `Productivity` on ChatGPT (there is no sports
-  category), `lifestyle` in the Claude marketplace file. Both are set.
+- **Category.** `Entertainment` on ChatGPT (`Productivity` was flagged by the
+  review: "We couldn't confirm the selected category"; there is no sports
+  category, `Other` is the fallback), `lifestyle` in the Claude marketplace
+  file. The ChatGPT short description now says it is about padel.
 - **Countries.** The ChatGPT listing is limited to France, Belgium and
   Luxembourg (`publication.countries: ["FR", "BE", "LU"]`). The Claude manifest
   has no country field, so the Claude listing is not restricted. The listing
