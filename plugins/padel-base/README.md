@@ -22,7 +22,7 @@ or to the tournament registration page.
   subject: finding a club, searching around a place, courts, tournaments, open
   matches, WhatsApp ads, estimating a level, club information.
 
-No hooks, no scripts, no local code: the plugin is text files and two logos.
+No hooks, no scripts, no local code: the plugin is text files and its logo and icons.
 
 ## Sign-in
 

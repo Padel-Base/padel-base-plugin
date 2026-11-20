@@ -39,8 +39,9 @@
           "Des parties ouvertes ce soir près de chez moi ?",
           "Quels tournois P100 autour de Lyon ce mois-ci ?"
         ],
-        "brandColor": "#1F7A4D",
+        "brandColor": "#234187",
         "composerIcon": "./assets/icon.svg",
+        "composerIconDark": "./assets/icon-dark.svg",
         "logo": "./assets/logo.svg"
       },
       "review": {
